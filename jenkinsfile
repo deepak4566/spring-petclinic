@@ -11,7 +11,7 @@ pipeline {
                 sh 'ls -ltr'
                 sh "mvn clean package -DskipTests=true"
                 sh "mvn compile"
-                sh "mvn package"
+                
             }
         }
 
