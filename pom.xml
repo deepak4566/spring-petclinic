@@ -339,7 +339,7 @@
 
 <build>
     <!-- Other build configurations ... -->
-    <plugins>
+      <plugins>
         <!-- Other plugins ... -->
 
         <plugin>
@@ -370,7 +370,7 @@
         </plugin>
 
         <!-- Other plugins ... -->
-    </plugins>
+      </plugins>
     <!-- Other build configurations ... -->
 </build>
 
