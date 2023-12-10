@@ -334,16 +334,19 @@
                     <artifactItem>
                       <groupId>org.webjars.npm</groupId>
                       <artifactId>bootstrap</artifactId>
-                  <!-- Example Plugin Configuration -->
+                  
+
+
+      <!-- Example Plugin Configuration -->
 <build>
   <plugins>
     <plugin>
       <groupId>io.snyk</groupId>
       <artifactId>snyk-maven-plugin</artifactId>
       <version>2.2.0</version>
-      <configuration>
-        <org>deepak4566 <org>
       <inherited>false</inherited>
+      <configuration>
+        <org>deepak4566<org>
       <executions>
         <execution>
           <id>snyk-test</id>
@@ -366,16 +369,7 @@
       </configuration>
     </plugin>
   </plugins>
-</build>    <version>${webjars-bootstrap.version}</version>
-                    </artifactItem>
-                  </artifactItems>
-                  <outputDirectory>${project.build.directory}/webjars</outputDirectory>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-
-   
+</build>    
 
 
 
