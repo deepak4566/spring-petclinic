@@ -20,7 +20,7 @@ pipeline {
        stage('snyk scan') {
             steps {
                 withCredentials([string(credentialsId: 'SNYK_API_TOKEN', variable: 'SNYK_API_TOKEN')]) {
-                 sh 'mvn snyk:test -fn'                   
+                 sh 'mvn snyk:test -fn'     }              
             }
         }
 
