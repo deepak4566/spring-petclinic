@@ -1,43 +1,34 @@
 pipeline {
-  agent any
-  tools {
-    maven 'Maven-3.9.1'
-    jdk 'openjdk-17.0.7'
-  }
+    agent any
+    tools {
+        maven 'Maven-3.9.1'
+        jdk 'openjdk-17.0.7'
+    }
 
+    stages {
+        stage('maven build and test') {
+            steps {
+                sh 'ls -ltr'
+                sh "cd spring-petclinic && mvn clean package -DskipTests=true"
+                sh "mvn compile"
+                sh "mvn package"
+            }
+        }
 
-      stages {
-            stage ('maven build and test') {
-              steps 
-                 {
-                  sh 'ls -ltr'
-                  sh "cd spring-petclinic && mvn clean package -DskipTests=true"
-                  sh "mvn compile"
-                  sh "mvn package"          }
-          
-            stage ('snyk scanning') {
-               steps {
-                  echo 'Testing...'
-                  snykSecurity(
-                  snykTokenId: $SYNK_TOKEN  )    
-                                            
-                                             } }
-            stage ('sonarcloud ') {
-                steps { 
-                  env.SONARCLOUD_TOKEN = "${SONARCLOUD_TOKEN}"
-                  sh "mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=deepak4566_spring-petclinic"
-                   }
-                  
-                     
-                                                }
-              
+        stage('snyk scanning') {
+            steps {
+                echo 'Testing...'
+                snykSecurity(
+                    snykTokenId: $SYNK_TOKEN
+                )
+            }
+        }
 
-
-
-
-            
+        stage('sonarcloud') {
+            steps {
+                env.SONARCLOUD_TOKEN = "${SONARCLOUD_TOKEN}"
+                sh "mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=deepak4566_spring-petclinic"
+            }
         }
     }
-  }
- 
- 
+}
