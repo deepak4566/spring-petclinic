@@ -337,45 +337,43 @@
                   
 
 
-<build>   
-  <!-- Other build configurations ... -->
-  <plugins>
-    <!-- Other plugins ... -->
+<build>
+    <!-- Other build configurations ... -->
+    <plugins>
+        <!-- Other plugins ... -->
 
-    <plugin>
-      <groupId>io.snyk</groupId>
-      <artifactId>snyk-maven-plugin</artifactId>
-      <version>2.2.0</version>
-      <configuration>
-        <org>deepak4566<org>
-      </configuration>    
-      <executions>
-        <execution>
-          <id>snyk-test</id>
-          <goals>
-            <goal>test</goal>
-          </goals>
-        </execution>
-        <execution>
-          <id>snyk-monitor</id>
-          <goals>
-            <goal>monitor</goal>
-          </goals>
-        </execution>
-      </executions>
-      <inherited>false</inherited>
-      <configuration>
-        <apiToken>${env.SNYK_TOKEN}</apiToken>
-        <args>
-          <arg>--all-projects</arg>
-        </args>
-      </configuration>
-    </plugin>
+        <plugin>
+            <groupId>io.snyk</groupId>
+            <artifactId>snyk-maven-plugin</artifactId>
+            <version>2.2.0</version>
+            <inherited>false</inherited>
+            <executions>
+                <execution>
+                    <id>snyk-test</id>
+                    <goals>
+                        <goal>test</goal>
+                    </goals>
+                    <configuration>
+                        <apiToken>${env.SNYK_TOKEN}</apiToken>
+                        <args>
+                            <arg>--all-projects</arg>
+                        </args>
+                    </configuration>
+                </execution>
+                <execution>
+                    <id>snyk-monitor</id>
+                    <goals>
+                        <goal>monitor</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
 
-    <!-- Other plugins ... -->
-  </plugins>
-  <!-- Other build configurations ... -->
+        <!-- Other plugins ... -->
+    </plugins>
+    <!-- Other build configurations ... -->
 </build>
+
 
 
 
