@@ -13,7 +13,7 @@ pipeline {
         stage('maven build and test') {
             steps {
                 sh 'ls -ltr'
-                sh "mvn clean package -DskipTests=true"
+                sh "mvn clean package -DskipTests=true -fn"
                 sh "mvn compile"
             }
         }
