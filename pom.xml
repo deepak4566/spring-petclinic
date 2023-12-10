@@ -348,7 +348,7 @@
       <version>2.2.0</version>
       <configuration>
         <org>deepak4566<org>
-      <configuration>    
+      </configuration>    
       <executions>
         <execution>
           <id>snyk-test</id>
