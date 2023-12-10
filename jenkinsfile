@@ -26,8 +26,8 @@ pipeline {
 
         stage('sonarcloud') {
             steps {
-                env.SONARCLOUD_TOKEN = "${SONARCLOUD_TOKEN}"
-                sh "mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=deepak4566_spring-petclinic"
+               script{ env.SONARCLOUD_TOKEN = "${SONARCLOUD_TOKEN}"
+                sh "mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=deepak4566_spring-petclinic" }
             }
         }
     }
