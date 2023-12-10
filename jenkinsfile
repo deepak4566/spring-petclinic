@@ -4,7 +4,10 @@ pipeline {
         maven 'Maven-3.9.1'
         
     }
-
+  environment {
+        SYNK_TOKEN = credentials('SNYK_API_TOKEN') // Replace with your actual credential ID
+        SONARCLOUD_TOKEN = credentials('SONARCLOUD_KEY') // Replace with your actual credential ID
+    }
     stages {
         stage('maven build and test') {
             steps {
@@ -18,14 +21,14 @@ pipeline {
         stage('snyk scanning') {
             steps {
                 echo 'Testing...'
-                 snykSecurity(snykTokenId: $SNYK_TOKEN)   
+                 snykSecurity(snykTokenId: SNYK_API_TOKEN)   
                 
             }
         }
 
         stage('sonarcloud') {
             steps {
-               script{ env.SONARCLOUD_TOKEN = "${SONARCLOUD_TOKEN}"
+               script{ env.SONARCLOUD_TOKEN = SONARCLOUD_TOKEN
                 sh "mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=deepak4566_spring-petclinic" }
             }
         }
