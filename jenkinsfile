@@ -23,6 +23,18 @@ pipeline {
                  sh 'mvn snyk:test -fn'     }              
             }
         }
+      
+       stage('sonarcloud scan') {
+            steps {
+               script{ withCredentials([string(credentialsId: 'SONARCLOUD_TOKEN', variable: 'SONARCLOUD_TOKEN')]) {
+                        sh'mvn clean verify sonar:sonar \
+                              -Dsonar.token=SONARCLOUD_TOKEN \
+                               -Dsonar.host.url=https://sonarcloud.io \
+                               -Dsonar.organization=deepak4566 \
+                               -Dsonar.projectKey=deepak4566_spring-petclinic '
+                      }  }            
+            }
+        }
 
         
 
