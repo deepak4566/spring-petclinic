@@ -1,9 +1,7 @@
 pipeline {
     agent any
 
-    environment {
-        PATH = "/path/to/snyk:$PATH"
-    }
+    
 
     tools {
         maven 'Maven-3.9.1'
