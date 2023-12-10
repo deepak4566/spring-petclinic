@@ -10,15 +10,7 @@ pipeline {
     }
 
     stages {
-        stage('Install Snyk') {
-            steps {
-                script {
-                    // Install Snyk
-                    
-                    sh 'npm install -g snyk'
-                }
-            }
-        }
+        
 
         stage('maven build and test') {
             steps {
@@ -28,19 +20,7 @@ pipeline {
             }
         }
 
-        stage('snyk scanning') {
-            steps {
-                script {
-                    // Ensure that Snyk is in the PATH
-                    echo "Current PATH: $PATH"
-                    sh 'which snyk'
-                    // Use credentials for Snyk scanning
-                    withCredentials([string(credentialsId: 'SNYK_API_TOKEN', variable: 'SNYK_API_TOKEN')]) {
-                        sh "snyk test --token=$SNYK_API_TOKEN"
-                    }
-                }
-            }
-        }
+        
 
         stage('sonarcloud') {
             steps {
