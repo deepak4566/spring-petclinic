@@ -17,16 +17,15 @@ pipeline {
                 sh "mvn compile"
             }
         }
+       stage('snyk scan') {
+            steps {
+                withCredentials([string(credentialsId: 'SNYK_API_TOKEN', variable: 'SNYK_API_TOKEN')]) {
+                 sh 'mvn snyk:test -fn                   
+            }
+        }
 
         
 
-        stage('sonarcloud') {
-            steps {
-                script {
-                    env.SONARCLOUD_TOKEN = SONARCLOUD_TOKEN
-                    sh "mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=deepak4566_spring-petclinic"
-                }
-            }
-        }
+        
     }
 }
