@@ -2,7 +2,7 @@ FROM openjdk:22-jdk-bullseye
 
 RUN mkdir -p /home/petclinic/
 
-COPY ./target/spring-petclinic-3.2.0-SNAPSHOT.jar /home/petclinic/
+COPY ./target/spring-petclinic-3.2.0-SNAPSHOT.jar.original  /home/petclinic/
 
 WORKDIR /home/petclinic/
 
