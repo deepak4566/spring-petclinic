@@ -16,7 +16,7 @@ pipeline {
         stage('snyk scanning') {
             steps {
                 // Use credentials for Snyk scanning
-                withCredentials([string(credentialsId: 'YOUR_CREDENTIALS_ID', variable: 'SNYK_API_TOKEN')]) {
+                withCredentials([string(credentialsId: 'SNYK_API_TOKEN', variable: 'SNYK_API_TOKEN')]) {
                     sh "snyk test --token=$SNYK_API_TOKEN"
                 }
             }
