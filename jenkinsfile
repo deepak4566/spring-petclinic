@@ -36,7 +36,16 @@ pipeline {
             }
         }
 
-        
+       stage('building a docker image') {
+         steps{
+           script {
+             sh "docker build -t deepak4566/petapp:1.0 ."
+                
+        }
+          
+      }
+    } 
+
 
         
     }
