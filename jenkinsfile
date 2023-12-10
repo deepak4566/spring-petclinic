@@ -18,7 +18,7 @@ pipeline {
         stage('snyk scanning') {
             steps {
                 echo 'Testing...'
-                 snykSecurity(snykTokenId: SNYK_API_TOKEN)   
+                 snykSecurity(snykTokenId: $SNYK_API_TOKEN)   
                 
             }
         }
