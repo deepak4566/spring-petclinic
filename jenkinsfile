@@ -9,7 +9,7 @@ pipeline {
         stage('maven build and test') {
             steps {
                 sh 'ls -ltr'
-                sh "cd spring-petclinic && mvn clean package -DskipTests=true"
+                sh "mvn clean package -DskipTests=true"
                 sh "mvn compile"
                 sh "mvn package"
             }
