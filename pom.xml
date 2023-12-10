@@ -337,9 +337,9 @@
                   
 
 
-      <!-- Example Plugin Configuration -->
-<build>
-</plugins>
+      <!-- Example Plugin Configuration --> 
+</build>
+ </plugins>
    </plugin>
       <groupId>io.snyk</groupId>
       <artifactId>snyk-maven-plugin</artifactId>
