@@ -337,11 +337,13 @@
                   
 
 
-     <build>
-  <plugins>
+   <build>  
+       
+       
+       <plugins>
     <!-- Other plugins ... -->
 
-    <plugin>
+     <plugin>
       <groupId>io.snyk</groupId>
       <artifactId>snyk-maven-plugin</artifactId>
       <version>2.2.0</version>
