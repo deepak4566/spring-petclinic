@@ -2,7 +2,6 @@ pipeline {
     agent any
     tools {
         maven 'Maven-3.9.1'
-        
     }
  
     stages {
@@ -11,23 +10,24 @@ pipeline {
                 sh 'ls -ltr'
                 sh "mvn clean package -DskipTests=true"
                 sh "mvn compile"
-                
             }
         }
 
         stage('snyk scanning') {
             steps {
-               
-                 // Use credentials for Snyk scanning
-                    withCredentials([string(credentialsId: '', variable: 'SNYK_API_TOKEN')]) {
-                        sh "snyk test --token=$SNYK_API_TOKEN"
+                // Use credentials for Snyk scanning
+                withCredentials([string(credentialsId: 'YOUR_CREDENTIALS_ID', variable: 'SNYK_API_TOKEN')]) {
+                    sh "snyk test --token=$SNYK_API_TOKEN"
+                }
             }
         }
 
         stage('sonarcloud') {
             steps {
-               script{ env.SONARCLOUD_TOKEN = SONARCLOUD_TOKEN
-                sh "mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=deepak4566_spring-petclinic" }
+                script {
+                    env.SONARCLOUD_TOKEN = SONARCLOUD_TOKEN
+                    sh "mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=deepak4566_spring-petclinic"
+                }
             }
         }
     }
