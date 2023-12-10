@@ -31,7 +31,7 @@ pipeline {
                               -Dsonar.token=SONARCLOUD_TOKEN \
                                -Dsonar.host.url=https://sonarcloud.io \
                                -Dsonar.organization=deepak4566 \
-                               -Dsonar.projectKey=deepak4566_spring-petclinic '
+                               -Dsonar.projectKey=deepak4566_spring-petclinic -fn '
                       }  }            
             }
         }
