@@ -8,4 +8,4 @@ WORKDIR /home/petclinic/
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "spring-petclinic-3.1.0-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "spring-petclinic-3.2.0-SNAPSHOT.jar"]
