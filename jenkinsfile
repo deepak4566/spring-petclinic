@@ -1,15 +1,11 @@
-
 pipeline {
-  agent {
-    docker {
-      image 'abhishekf5/maven-abhishek-docker-agent:v1'
-      args '--user root -v /var/run/docker.sock:/var/run/docker.sock' // mount Docker socket to access the host's Docker daemon
-    }
-    tools {
-      maven 'Maven-3.9.1'
-      jdk 'openjdk-17.0.7'
-     }
+  agent any
+  tools {
+    maven 'Maven-3.9.1'
+    jdk 'openjdk-17.0.7'
   }
+
+
       stages {
             stage ('maven build and test') {
               steps 
