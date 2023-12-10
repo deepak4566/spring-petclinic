@@ -14,7 +14,7 @@ pipeline {
             steps {
                 script {
                     // Install Snyk
-                    sh 'sudo apt install npm'
+                    sh ' apt install npm'
                     sh 'npm install -g snyk'
                 }
             }
