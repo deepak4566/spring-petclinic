@@ -7,8 +7,16 @@ pipeline {
         maven 'Maven-3.9.1'
     }
 
-    stages {
-        
+    stages { 
+
+        stage("Cleanup Workspace"){
+            steps {
+                cleanWs()
+            }
+
+        }   
+     
+         
 
         stage('maven build and test') {
             steps {
