@@ -1,10 +1,8 @@
 FROM openjdk:22-jdk-bullseye
 
-RUN mkdir -p /home/petclinic/ && cd /home/petclinic/target
+WORKDIR /home/petclinic
 
-COPY ./target/spring-petclinic-3.2.0-SNAPSHOT.jar  /home/petclinic/
-
-WORKDIR /home/petclinic/
+COPY ./target/spring-petclinic-3.2.0-SNAPSHOT.jar .
 
 EXPOSE 8080
 
