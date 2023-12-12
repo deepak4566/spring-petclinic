@@ -39,26 +39,19 @@ pipeline {
             }
         }
 
-       stage('building a docker image') {
+       stage('building a docker image and push image ') {
          steps{
            script {
              sh "docker build -t deepak8934/petapp:${BUILD_NUMBER} ."
+             docker.withRegistry([credentialsId: 'docker-cred', url: 'https://index.docker.io/v1/']) {
+                dockerImage.push() }
                 
         }
           
       }
     } 
  
-       stage('push docker image') {
-    steps {
-        script {
-            docker.withRegistry([credentialsId: 'docker-cred', url: 'https://index.docker.io/v1/']) {
-                dockerImage.push("${BUILD_NUMBER}")
-            }
-        }
-    }
-}
-
+      
         
     }
 }
