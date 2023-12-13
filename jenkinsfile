@@ -37,11 +37,8 @@ pipeline {
                script{  
                           withSonarQubeEnv(installationName: 'SonarCloud', credentialsId: 'SONARCLOUD_TOKEN') {
                           withMaven(maven: 'maven'){
-                          sh "  mvn clean verify sonar:sonar \
-                              -Dsonar.token=SONARCLOUD_TOKEN\
-                              -Dsonar.host.url=https://sonarcloud.io \
-                              -Dsonar.organization=deepak4566 \
-                               -Dsonar.projectKey= deepak4566_spring-petclinic -Dcheckstyle.skip" 
+                          sh " mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar  -Dsonar.projectKey= deepak4566_spring-petclinic -Dcheckstyle.skip"   
+                              
                    }  
                        }
 
