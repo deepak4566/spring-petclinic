@@ -30,21 +30,28 @@ pipeline {
             }
         }
       
-       stage('sonarcloud scan') {
-            steps {
-               script{  
-                          withSonarQubeEnv(installationName: 'SonarCloud', credentialsId: 'SONARCLOUD_TOKEN') {
-                         
-                          sh " mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar  -Dsonar.projectKey= deepak4566_spring-petclinic -Dcheckstyle.skip  -fn "   
-                              
-                    
-                       }
 
-                 }
+        
+       stage('Static Code Analysis') {
+        environment {
+          SONAR_URL = "http://34.201.116.83:9000"
+         }
+               steps {
+                    withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
+                          sh ' mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
+                                  }
+                                   }
+                                            } 
 
 
-            }
-        }
+
+
+
+
+
+
+
+
 
        stage('building a docker image  ') {
          steps{
