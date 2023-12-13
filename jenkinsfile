@@ -13,31 +13,39 @@ pipeline {
      
          
 
-        stage('maven build and test') {
-            steps {
-                sh 'ls -ltr'
-                sh "mvn clean package -DskipTests=true "
-                archive 'target/*.jar'
-                
-                sh "mvn compile"
-            }
-        }
+       
        stage('snyk scan') {
             steps {
-                withCredentials([string(credentialsId: 'SNYK_API_TOKEN', variable: 'SNYK_API_TOKEN')]) {
-                 sh 'mvn snyk:test -fn'     }              
+                      
+                  snykSecurity( 
+                    snykInstallation: 'snyk@latest', 
+                    snykTokenId: 'snyk_api_token', 
+                    monitorProjectOnBuild: false,
+                    failOnIssues: 'false', 
+                    additionalArguments: '--json-file-output=all-vulnerabilities.json'
+                )     
+                 
+
+
             }
         }
       
        stage('sonarcloud scan') {
             steps {
-               script{ withCredentials([string(credentialsId: 'SONARCLOUD_TOKEN', variable: 'SONARCLOUD_TOKEN')]) {
-                        sh'mvn clean verify sonar:sonar \
-                              -Dsonar.token=SONARCLOUD_TOKEN \
-                               -Dsonar.host.url=https://sonarcloud.io \
-                               -Dsonar.organization=deepak4566 \
-                               -Dsonar.projectKey=deepak4566_spring-petclinic -fn '
-                      }  }            
+               script{  
+                          withSonarQubeEnv(installationName: 'SonarCloud', credentialsId: 'SONARCLOUD_TOKEN') {
+                          withMaven(maven: 'maven'){
+                          sh "  mvn clean verify sonar:sonar \
+                              -Dsonar.token=SONARCLOUD_TOKEN\
+                              -Dsonar.host.url=https://sonarcloud.io \
+                              -Dsonar.organization=deepak4566 \
+                               -Dsonar.projectKey= deepak4566_spring-petclinic -Dcheckstyle.skip" 
+                   }  
+                       }
+
+                 }
+
+
             }
         }
 
