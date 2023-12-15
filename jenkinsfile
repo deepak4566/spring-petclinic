@@ -7,7 +7,23 @@ pipeline {
     stages { 
 
         
+
+     stage('maven build and test') {
+            steps {	           
+                sh 'ls -ltr'	
+                sh 'mvn clean package -Dskiptests=true'
+                                  }
+                                       }
      
+    stage('maven compile') {
+            steps {	            
+              	                
+               sh 'mvn compile -Dskiptests=true
+                       }
+                          }
+
+
+  
          
 
        
@@ -42,7 +58,7 @@ pipeline {
 
 
 
-
+    
 
 
 
@@ -60,6 +76,21 @@ pipeline {
           
       }
     } 
+         
+     stage('docker image push'){
+           steps{
+              script { withDockerRegistry(credentialsId: 'dockercred', url: ''){
+                  sh " docker push  deepak8934/petapp:${BUILD_NUMBER} "} }
+                                       }
+          
+                                                                      
+                                                
+
+
+
+
+
+
 }
  
       
