@@ -11,14 +11,14 @@ pipeline {
      stage('maven build and test') {
             steps {	           
                 sh 'ls -ltr'	
-                sh 'mvn clean package -Dskiptests=true -Dcheckstyle.skip  '
+                sh 'mvn clean package -Dskiptests=true -Dcheckstyle.skip  -fn '
                                   }
                                        }
      
     stage('maven compile') {
             steps {	            
               	                
-               sh 'mvn compile -Dskiptests=true -Dcheckstyle.skip '
+               sh 'mvn compile -Dskiptests=true -Dcheckstyle.skip -fn '
                        }
                           }
 
