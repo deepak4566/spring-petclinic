@@ -1,25 +1,8 @@
 pipeline {
- agent any
+ agent any 
    
+     stages{
 
-                 
-
-   
-      stages { 
-
-         
-
-     
-       
-     
-    
-    
-
-
-  
-         
-
-       
        stage('snyk scan') {
             steps {
                       
@@ -43,16 +26,6 @@ pipeline {
                                   }
                                        }
         
-     
-
-
-    
-
-
-
-
-
-
 
        stage('building a docker image  ') {
          steps{
@@ -70,8 +43,27 @@ pipeline {
               script { withDockerRegistry(credentialsId: 'dockercred', url: ''){
                   sh " docker push  deepak8934/petapp:${BUILD_NUMBER} "} }
                                        }
+  
           
-                                                                      
+     stage('pulishing jar file in artifactory') {
+        steps{
+          script {
+
+            env.jfrog_token = "${jfrog_token}"
+
+          
+
+              sh '''
+                   curl -u t.l.deepakreddyats1@gmail.com:${jfrog_token} -T /var/lib/jenkins/workspace/Petclinic/target/spring-petclinic-3.2.0-SNAPSHOT.jar "https://cncf.jfrog.io/artifactory/maven-remote-libs-release/"
+                ''' 
+
+            
+
+          }
+           
+          }
+        }
+                                                                     
                                                 
 
 
