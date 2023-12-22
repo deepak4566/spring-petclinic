@@ -1,81 +1,48 @@
 pipeline {
- agent any 
-   
-     stages{
+    agent any
 
-       stage('snyk scan') {
+    stages {
+        stage('snyk scan') {
             steps {
-                      
-                  snykSecurity( 
-                    snykInstallation: 'snyk@latest', 
-                    snykTokenId: 'snyk_api_token', 
+                snykSecurity(
+                    snykInstallation: 'snyk@latest',
+                    snykTokenId: 'snyk_api_token',
                     monitorProjectOnBuild: false,
-                    failOnIssues: 'false', 
+                    failOnIssues: false,  // Use boolean for failOnIssues
                     additionalArguments: '--json-file-output=all-vulnerabilities.json'
-                )     
-                 
-
-
+                )
             }
         }
-      
+
         stage('maven build artifact') {
-            steps {	           
-                
-                sh 'mvn clean package -Dskiptests=true -Dcheckstyle.skip  -fn '
-                                  }
-                                       }
-        
-
-       stage('building a docker image  ') {
-         steps{
-           script {
-             sh "docker build -t deepak8934/petapp:${BUILD_NUMBER} ."
-             
-                
+            steps {
+                sh 'mvn clean package -DskipTests=true -Dcheckstyle.skip -fn'  // Correct capitalization for -DskipTests
+            }
         }
-          
-      }
-    } 
-         
-    stage('docker image push'){
-           steps{
-              script { withDockerRegistry(credentialsId: 'dockercred', url: ''){
-                  sh " docker push  deepak8934/petapp:${BUILD_NUMBER} "} }  
-                                       }
-                                      }
-  
-          
-     stage('pulishing jar file in artifactory') {
-        steps{
-          script {
 
-            env.jfrog_token = "${jfrog_token}"
-
-          
-
-              sh '''
-                   curl -u t.l.deepakreddyats1@gmail.com:${jfrog_token} -T /var/lib/jenkins/workspace/Petclinic/target/spring-petclinic-3.2.0-SNAPSHOT.jar "https://cncf.jfrog.io/artifactory/maven-remote-libs-release/"
-                ''' 
-
-            
-
-          }
-           
-          }
+        stage('building a docker image') {
+            steps {
+                sh "docker build -t deepak8934/petapp:${BUILD_NUMBER} ."
+            }
         }
-                                                                     
-                                                
 
+        stage('docker image push') {
+            steps {
+                withDockerRegistry(credentialsId: 'dockercred', url: '') {
+                    sh "docker push deepak8934/petapp:${BUILD_NUMBER}"
+                }
+            }
+        }
 
-
-
-
-
-}
- 
-      
-        
+        stage('publishing jar file in artifactory') {
+            steps {
+                script {
+                    env.jfrog_token = "${jfrog_token}"
+                    sh '''
+                        curl -u t.l.deepakreddyats1@gmail.com:${jfrog_token} -T /var/lib/jenkins/workspace/Petclinic/target/spring-petclinic-3.2.0-SNAPSHOT.jar "https://cncf.jfrog.io/artifactory/maven-remote-libs-release/"
+                    '''
+                }
+            }
+        }
     }
 }
-
