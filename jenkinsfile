@@ -32,7 +32,7 @@ pipeline {
 
                     // Install and publish project
                     jf 'mvn clean install -DskipTests -Dmaven.deploy.skip=true '
-                }
+                
             }
         }
 
