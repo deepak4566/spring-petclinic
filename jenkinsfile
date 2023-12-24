@@ -20,7 +20,7 @@ pipeline {
 
         stage('maven build artifact') {
             steps {
-                sh 'mvn clean package -DskipTests=true -Dcheckstyle.skip -fn'  // Correct capitalization for -DskipTests
+                jf  'mvn clean package -DskipTests=true -Dcheckstyle.skip -fn'  // Correct capitalization for -DskipTests
             }
         }
 
