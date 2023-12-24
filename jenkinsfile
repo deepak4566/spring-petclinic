@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+      tools {
+        jfrog 'jfrog-cli'
+      }
+
     stages {
         stage('snyk scan') {
             steps {
@@ -45,6 +49,16 @@ pipeline {
                 }
             }
         }
+
+
+        stage('Publish build info') {
+            steps {
+                jf 'rt build-publish'
+            }
+        }
+
+
+
 
         
     }
