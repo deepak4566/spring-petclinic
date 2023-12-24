@@ -20,9 +20,21 @@ pipeline {
             }
         }
 
+       stage('TRIVY FS SCAN') {
+            steps {
+                sh "trivy fs . > trivyfs.txt"
+            }
+        }
+
         stage('building a docker image') {
             steps {
                 sh "docker build -t deepak8934/petapp:${BUILD_NUMBER} ."
+            }
+        }
+
+       stage("TRIVY"){
+            steps{
+                sh "trivy image  deepak8934/petapp:${BUILD_NUMBER} > trivyimage.txt" 
             }
         }
 
@@ -34,15 +46,6 @@ pipeline {
             }
         }
 
-        stage('publishing jar file in artifactory') {
-            steps {
-                script {
-                    env.jfrog_token = "${jfrog_token}"
-                    sh '''
-                        curl -u t.l.deepakreddyats1@gmail.com:${jfrog_token} -T /var/lib/jenkins/workspace/pipeline_part2/target/spring-petclinic-3.2.0-SNAPSHOT.jar "https://cncf.jfrog.io/artifactory/maven-remote-libs-release/"
-                    '''
-                }
-            }
-        }
+        
     }
 }
