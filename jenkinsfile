@@ -20,6 +20,8 @@ pipeline {
 
         stage('maven build artifact') {
             steps {
+
+                jf 'mvn-config --repo-resolve-releases libs-release --repo-resolve-snapshots libs-snapshots --repo-deploy-releases libs-release-local --repo-deploy-snapshots libs-snapshot-local'
                 jf  'mvn clean package -DskipTests=true -Dcheckstyle.skip -fn'  // Correct capitalization for -DskipTests
             }
         }
