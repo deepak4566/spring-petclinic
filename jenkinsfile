@@ -34,7 +34,7 @@ pipeline {
 
        stage("TRIVY"){
             steps{
-                sh "trivy image  deepak8934/petapp:${BUILD_NUMBER} --ignore-unfixed > trivyimage.txt" 
+                sh "trivy image  deepak8934/petapp:${BUILD_NUMBER} --scanners vuln > trivyimage.txt" 
             }
         }
 
