@@ -24,17 +24,7 @@ pipeline {
             }
         }
 
-        stage('Exec Maven commands') {
-            steps {
-               
-                    // Configure Maven project's repositories
-                    jf 'mvn-config --repo-resolve-releases libs-release --repo-resolve-snapshots libs-snapshots --repo-deploy-releases libs-release-local --repo-deploy-snapshots libs-snapshot-local'
-
-                    // Install and publish project
-                    jf 'mvn clean install -DskipTests -Dmaven.deploy.skip=true '
-                
-            }
-        }
+        
 
 
 
