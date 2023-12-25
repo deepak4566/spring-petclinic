@@ -39,25 +39,25 @@ pipeline {
             }
         }
 
-       // stage('building a docker image') {
-           // steps {
-               // sh "docker build -t deepak8934/petapp:${BUILD_NUMBER} ."
-          //  }
-      //  }
+       stage('building a docker image') {
+            steps {
+                sh "docker build -t deepak8934/petapp:${BUILD_NUMBER} ."
+            }
+        }
 
-      // stage("TRIVY"){
-           // steps{
-              //  sh "trivy image  deepak8934/petapp:${BUILD_NUMBER} --scanners vuln > trivyimage.txt" 
-          //  }
-       // }
+       stage("TRIVY"){
+            steps{
+                sh "trivy image  deepak8934/petapp:${BUILD_NUMBER} --scanners vuln > trivyimage.txt" 
+            }
+        }
 
-        //stage('docker image push') {
-           // steps {
-               // withDockerRegistry(credentialsId: 'dockercred', url: '') {
-                  //  sh "docker push deepak8934/petapp:${BUILD_NUMBER}"
-               // }
-           // }
-      //  }
+        stage('docker image push') {
+            steps {
+                withDockerRegistry(credentialsId: 'dockercred', url: '') {
+                    sh "docker push deepak8934/petapp:${BUILD_NUMBER}"
+                }
+            }
+        }
 
 
         stage('Publish build info') {
