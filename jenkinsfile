@@ -20,9 +20,9 @@ pipeline {
 
         stage('maven build artifact') {
             steps {
+                 jf 'mvn-config --repo-resolve-releases maven-remote-libs-release --repo-resolve-snapshots maven-remote-libs-snapshot --repo-deploy-releases maven-remote-libs--release-local --repo-deploy-snapshots maven-remote-libs-snapshot-local'
 
-                jf 'mvn-config --repo-resolve-releases libs-release --repo-resolve-snapshots libs-snapshots --repo-deploy-releases libs-release-local --repo-deploy-snapshots libs-snapshot-local'
-                jf  'mvn clean package -DskipTests=true -Dcheckstyle.skip -fn'  // Correct capitalization for -DskipTests
+                 sh 'mvn clean package -DskipTests=true -Dcheckstyle.skip -fn'  // Correct capitalization for -DskipTests
             }
         }
 
@@ -38,25 +38,25 @@ pipeline {
             }
         }
 
-        stage('building a docker image') {
-            steps {
-                sh "docker build -t deepak8934/petapp:${BUILD_NUMBER} ."
-            }
-        }
+       // stage('building a docker image') {
+           // steps {
+               // sh "docker build -t deepak8934/petapp:${BUILD_NUMBER} ."
+          //  }
+      //  }
 
-       stage("TRIVY"){
-            steps{
-                sh "trivy image  deepak8934/petapp:${BUILD_NUMBER} --scanners vuln > trivyimage.txt" 
-            }
-        }
+      // stage("TRIVY"){
+           // steps{
+              //  sh "trivy image  deepak8934/petapp:${BUILD_NUMBER} --scanners vuln > trivyimage.txt" 
+          //  }
+       // }
 
-        stage('docker image push') {
-            steps {
-                withDockerRegistry(credentialsId: 'dockercred', url: '') {
-                    sh "docker push deepak8934/petapp:${BUILD_NUMBER}"
-                }
-            }
-        }
+        //stage('docker image push') {
+           // steps {
+               // withDockerRegistry(credentialsId: 'dockercred', url: '') {
+                  //  sh "docker push deepak8934/petapp:${BUILD_NUMBER}"
+               // }
+           // }
+      //  }
 
 
         stage('Publish build info') {
