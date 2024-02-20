@@ -8,4 +8,4 @@ EXPOSE 8080
 
 ENV MYSQL_URL=""  # Default value, can be overridden at runtime
 
-ENTRYPOINT ["java", "-jar", "spring-petclinic-3.2.0-SNAPSHOT.jar", "--spring.profiles.active=mysql", "--spring.datasource.url=${MYSQL_URL}"]
+ENTRYPOINT ["java", "-jar", "spring-petclinic-3.2.0-SNAPSHOT.jar", "--spring.profiles.active=mysql"]
