@@ -1,11 +1,13 @@
-FROM openjdk:22-jdk-bullseye
+FROM openjdk:17-oracle
 
-WORKDIR /home/petclinic
+RUN mkdir -p /home/petclinic
 
-COPY ./target/spring-petclinic-3.2.0-SNAPSHOT.jar .
+COPY target/*.jar /home/petclinic/
 
-EXPOSE 8080
+WORKDIR /home/petclinic/
 
-ENV MYSQL_URL=""  # Default value, can be overridden at runtime
+EXPOSE 8282
 
-ENTRYPOINT ["java", "-jar", "spring-petclinic-3.2.0-SNAPSHOT.jar", "--spring.profiles.active=mysql"]
+ENV MYSQL_URL=jdbc:mysql://petclinic-mysql:3306/petclinic
+
+CMD ["java", "-jar", "spring-petclinic-3.1.0-SNAPSHOT.jar", "--spring.profiles.active=mysql"]
