@@ -2,11 +2,12 @@ FROM openjdk:17-oracle
 
 RUN mkdir -p /home/petclinic
 
-COPY target/*.jar /home/petclinic/
-
 WORKDIR /home/petclinic/
 
-EXPOSE 8282
+COPY COPY ./target/spring-petclinic-3.2.0-SNAPSHOT.jar .
+
+
+EXPOSE 8080
 
 ENV MYSQL_URL=jdbc:mysql://petclinic-mysql:3306/petclinic
 
