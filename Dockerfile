@@ -4,8 +4,7 @@ RUN mkdir -p /home/petclinic
 
 WORKDIR /home/petclinic/
 
- COPY ./target/spring-petclinic-3.2.0-SNAPSHOT.jar .
-
+COPY ./target/spring-petclinic-3.2.0-SNAPSHOT.jar .
 
 EXPOSE 8080
 
