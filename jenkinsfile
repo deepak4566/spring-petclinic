@@ -23,7 +23,7 @@ pipeline {
               // jf 'mvn-config --petclinic_artifact-libs-release --petclinic_artifact-libs-snapshot --petclinic_artifact-libs-release-local --petclinic_artifact-libs-snapshot-local'
 
 
-                 sh 'mvn clean package -DskipTests=true -Dcheckstyle.skip -fn'  // Correct capitalization for -DskipTests
+                 sh 'mvn clean package -DskipTests=true '  // Correct capitalization for -DskipTests
             }
         }
 
