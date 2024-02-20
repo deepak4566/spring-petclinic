@@ -1,7 +1,5 @@
 FROM openjdk:17-oracle
 
-RUN mkdir -p /home/petclinic
-
 WORKDIR /home/petclinic/
 
 COPY ./target/spring-petclinic-3.2.0-SNAPSHOT.jar .
