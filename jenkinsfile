@@ -27,18 +27,7 @@ pipeline {
             }
         }
 
-stage('docker_scout_scan') {
-  steps {
-    script {
-      def imageName = "deepak8934/petapp:${BUILD_NUMBER}"
 
-      // Remove --output text, since it's not supported
-      sh """
-        docker scout quickview ${imageName} > scout-report.txt || true
-      """
-    }
-  }
-}
 
 
         stage('Docker Image Push') {
