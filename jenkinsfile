@@ -10,20 +10,7 @@ pipeline {
             }
         }
 
-        stage('SonarCloud Scan') {
-            environment {
-                SONAR_TOKEN = credentials('sonarcloud_token_id')
-            }
-            steps {
-                sh '''
-                    mvn sonar:sonar \
-                      -Dsonar.projectKey=deepak4566_spring-petclinic \
-                      -Dsonar.organization=deepak4566 \
-                      -Dsonar.host.url=https://sonarcloud.io \
-                      -Dsonar.login=$SONAR_TOKEN
-                '''
-            }
-        }
+        
 
         stage('Install Trivy') {
             steps {
