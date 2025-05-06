@@ -27,15 +27,15 @@ pipeline {
             }
         }
 
-        stage('trivy_image') {
+stage('trivy_image') {
   steps {
     sh '''
       export TRIVY_CACHE_DIR=/tmp/trivy-cache
       mkdir -p $TRIVY_CACHE_DIR
 
+      # First run must allow DB update
       trivy image deepak8934/petapp:${BUILD_NUMBER} \
         --scanners vuln \
-        --skip-db-update \
         --exit-code 0 \
         --quiet \
         -f table > trivyimage.txt
