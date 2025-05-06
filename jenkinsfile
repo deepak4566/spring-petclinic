@@ -27,19 +27,15 @@ pipeline {
             }
         }
 
-stage('trivy_image') {
+stage('docker_scout_scan') {
   steps {
-    sh '''
-      export TRIVY_CACHE_DIR=/tmp/trivy-cache
-      mkdir -p $TRIVY_CACHE_DIR
+    script {
+      def imageName = "deepak8934/petapp:${BUILD_NUMBER}"
 
-      # First run must allow DB update
-      trivy image deepak8934/petapp:${BUILD_NUMBER} \
-        --scanners vuln \
-        --exit-code 0 \
-        --quiet \
-        -f table > trivyimage.txt
-    '''
+      sh """
+        docker scout quickview ${imageName} --output text > scout-report.txt || true
+      """
+    }
   }
 }
 
