@@ -29,7 +29,8 @@ pipeline {
 
         stage('SCA Scan (Dependencies)') {
             steps {
-                sh 'trivy sbom sbom.json --exit-code 0 > sca_scan.txt'
+                sh 'trivy sbom dir:. -o cyclonedx-json > sbom.json
+'
             }
         }
 
