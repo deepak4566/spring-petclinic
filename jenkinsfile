@@ -1,6 +1,14 @@
 pipeline {
     agent any
 
+    environment {
+        SONAR_TOKEN = credentials('sonarcloud_token_id')
+    }
+
+    triggers {
+        pollSCM('* * * * *') // Checks for Git changes every minute (adjust as needed)
+    }
+
     stages {
         stage('Maven Build Artifact') {
             steps {
@@ -9,24 +17,28 @@ pipeline {
         }
 
         stage('SonarCloud Scan') {
-            environment {
-                SONAR_TOKEN = credentials('sonarcloud_token_id')
-            }
             steps {
                 sh '''
                     mvn sonar:sonar \
-                      -Dsonar.projectKey=deepak4566_spring-petclinic\
-                      -Dsonar.organization=deepak4566\
+                      -Dsonar.projectKey=deepak4566_spring-petclinic \
+                      -Dsonar.organization=deepak4566 \
                       -Dsonar.host.url=https://sonarcloud.io \
                       -Dsonar.login=$SONAR_TOKEN
                 '''
             }
         }
 
+        stage('Install Trivy') {
+            steps {
+                sh '''
+                    curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+                '''
+            }
+        }
+
         stage('Trivy FS Scan') {
             steps {
-               sh  "curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin"
-                sh "trivy fs . --scanners config,secret,vuln > trivyfs.txt"
+                sh 'trivy fs . --scanners config,secret,vuln --exit-code 0 > trivyfs.txt'
             }
         }
 
@@ -41,10 +53,7 @@ pipeline {
 
         stage('SCA Scan (Dependencies)') {
             steps {
-                sh '''
-                    curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
-                    trivy sbom sbom.json > sca_scan.txt
-                '''
+                sh 'trivy sbom sbom.json --exit-code 0 > sca_scan.txt'
             }
         }
 
@@ -56,7 +65,7 @@ pipeline {
 
         stage('Trivy Image Scan') {
             steps {
-                sh "trivy image deepak8934/petapp:${BUILD_NUMBER} --scanners vuln > trivyimage.txt"
+                sh "trivy image deepak8934/petapp:${BUILD_NUMBER} --scanners vuln --exit-code 0 > trivyimage.txt"
             }
         }
 
@@ -68,5 +77,16 @@ pipeline {
             }
         }
     }
-}
 
+    post {
+        always {
+            archiveArtifacts artifacts: '*.txt, sbom.json', allowEmptyArchive: true
+        }
+        failure {
+            echo "❌ Build failed. Check logs and scan reports for issues."
+        }
+        success {
+            echo "✅ Build and scans completed successfully."
+        }
+    }
+}
