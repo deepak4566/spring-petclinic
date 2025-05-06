@@ -12,7 +12,22 @@ pipeline {
 
         
 
-stage('trivy_image') {
+
+        stage('Trivy FS Scan') {
+            steps {
+                sh 'trivy fs . --scanners config,secret,vuln --exit-code 0 > trivyfs.txt'
+            }
+        }
+
+        
+        
+        stage('Building a Docker Image') {
+            steps {
+                sh "docker build -t deepak8934/petapp:${BUILD_NUMBER} ."
+            }
+        }
+
+        stage('trivy_image') {
   steps {
     sh '''
       export TRIVY_CACHE_DIR=/tmp/trivy-cache
@@ -27,29 +42,6 @@ stage('trivy_image') {
     '''
   }
 }
-
-
-
-        stage('SBOM Generation') {
-            steps {
-                sh '''
-                   syft dir:. -o cyclonedx-json > sbom.json
-                  '''
-            }
-        }
-
-        
-        stage('Building a Docker Image') {
-            steps {
-                sh "docker build -t deepak8934/petapp:${BUILD_NUMBER} ."
-            }
-        }
-
-        stage('Trivy Image Scan') {
-            steps {
-                sh "trivy image deepak8934/petapp:${BUILD_NUMBER} --scanners vuln --exit-code 0 > trivyimage.txt"
-            }
-        }
 
         stage('Docker Image Push') {
             steps {
