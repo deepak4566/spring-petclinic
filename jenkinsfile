@@ -27,13 +27,7 @@ pipeline {
             }
         }
 
-        stage('SCA Scan (Dependencies)') {
-            steps {
-                sh 'trivy sbom dir:. -o cyclonedx-json > sbom.json
-'
-            }
-        }
-
+        
         stage('Building a Docker Image') {
             steps {
                 sh "docker build -t deepak8934/petapp:${BUILD_NUMBER} ."
