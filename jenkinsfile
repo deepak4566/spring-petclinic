@@ -5,9 +5,6 @@ pipeline {
         SONAR_TOKEN = credentials('sonarcloud_token_id')
     }
 
-    triggers {
-        pollSCM('* * * * *') // Checks for Git changes every minute (adjust as needed)
-    }
 
     stages {
         stage('Maven Build Artifact') {
