@@ -32,12 +32,14 @@ stage('docker_scout_scan') {
     script {
       def imageName = "deepak8934/petapp:${BUILD_NUMBER}"
 
+      // Remove --output text, since it's not supported
       sh """
-        docker scout quickview ${imageName} --output text > scout-report.txt || true
+        docker scout quickview ${imageName} > scout-report.txt || true
       """
     }
   }
 }
+
 
         stage('Docker Image Push') {
             steps {
