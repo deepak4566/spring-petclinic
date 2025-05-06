@@ -1,10 +1,7 @@
 pipeline {
     agent any
 
-    environment {
-        SONAR_TOKEN = credentials('sonarcloud_token_id')
-    }
-
+   
 
     stages {
         stage('Maven Build Artifact') {
@@ -14,6 +11,9 @@ pipeline {
         }
 
         stage('SonarCloud Scan') {
+            environment {
+                SONAR_TOKEN = credentials('sonarcloud_token_id')
+            }
             steps {
                 sh '''
                     mvn sonar:sonar \
