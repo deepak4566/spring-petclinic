@@ -22,7 +22,7 @@ pipeline {
         stage('SBOM Generation') {
             steps {
                 sh '''
-                    syft . -o cyclonedx-json > sbom.json
+                    syft dir:. --name spring-petclinic --version 1.0.0 -o cyclonedx-json > sbom.json
                 '''
             }
         }
