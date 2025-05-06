@@ -13,11 +13,22 @@ pipeline {
         
 
 
-        stage('Trivy FS Scan') {
-            steps {
-                sh 'trivy fs . --scanners config,secret,vuln --exit-code 0 > trivyfs.txt'
-            }
-        }
+       stage('trivy_image') {
+  steps {
+    sh '''
+      export TRIVY_CACHE_DIR=/tmp/trivy-cache
+      mkdir -p $TRIVY_CACHE_DIR
+      trivy image deepak8934/petapp:${BUILD_NUMBER} \
+        --scanners vuln \
+        --skip-db-update \
+        --skip-java-db \
+        --exit-code 0 \
+        --quiet \
+        -f table > trivyimage.txt
+    '''
+  }
+}
+
 
         stage('SBOM Generation') {
             steps {
