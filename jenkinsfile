@@ -22,10 +22,8 @@ pipeline {
         stage('SBOM Generation') {
             steps {
                 sh '''
-                    jq '.metadata.component |= . + {"name": "spring-petclinic", "version": "1.0.0"}' sbom.json > fixed-sbom.json
-                    mv fixed-sbom.json sbom.json
-
-                '''
+                   syft dir:. -o cyclonedx-json > sbom.json
+                  '''
             }
         }
 
