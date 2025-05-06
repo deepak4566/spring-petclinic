@@ -74,16 +74,4 @@ pipeline {
             }
         }
     }
-
-    post {
-        always {
-            archiveArtifacts artifacts: '*.txt, sbom.json', allowEmptyArchive: true
-        }
-        failure {
-            echo "❌ Build failed. Check logs and scan reports for issues."
-        }
-        success {
-            echo "✅ Build and scans completed successfully."
-        }
-    }
 }
