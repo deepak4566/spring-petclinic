@@ -1,84 +1,71 @@
 pipeline {
     agent any
-  
-      tools {
-        jfrog 'jfrog-cli'
-      }
 
     stages {
-        stage('snyk scan') {
+        stage('Maven Build Artifact') {
             steps {
-                snykSecurity(
-                    snykInstallation: 'snyk@latest',
-                    snykTokenId: 'snyk_api_token',
-                    monitorProjectOnBuild: false,
-                    failOnIssues: false,  // Use boolean for failOnIssues
-                    additionalArguments: '--json-file-output=all-vulnerabilities.json'
-                )
+                sh 'mvn clean package -DskipTests=true'
             }
         }
 
-        stage('maven build artifact') {
+        stage('SonarCloud Scan') {
+            environment {
+                SONAR_TOKEN = credentials('sonarcloud_token_id')
+            }
             steps {
-              // jf 'mvn-config --petclinic_artifact-libs-release --petclinic_artifact-libs-snapshot --petclinic_artifact-libs-release-local --petclinic_artifact-libs-snapshot-local'
-
-
-                 sh 'mvn clean package -DskipTests=true '  // Correct capitalization for -DskipTests
+                sh '''
+                    mvn sonar:sonar \
+                      -Dsonar.projectKey=your_project_key \
+                      -Dsonar.organization=your_org_key \
+                      -Dsonar.host.url=https://sonarcloud.io \
+                      -Dsonar.login=$SONAR_TOKEN
+                '''
             }
         }
 
-        
-
-
-
-
-
-       stage('TRIVY FS SCAN') {
+        stage('Trivy FS Scan') {
             steps {
-                sh "trivy fs . > trivyfs.txt"
+                sh "trivy fs . --scanners config,secret,vuln > trivyfs.txt"
             }
         }
 
-       stage('building a docker image') {
+        stage('SBOM Generation') {
+            steps {
+                sh '''
+                    curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+                    syft . -o cyclonedx-json > sbom.json
+                '''
+            }
+        }
+
+        stage('SCA Scan (Dependencies)') {
+            steps {
+                sh '''
+                    curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+                    trivy sbom sbom.json > sca_scan.txt
+                '''
+            }
+        }
+
+        stage('Building a Docker Image') {
             steps {
                 sh "docker build -t deepak8934/petapp:${BUILD_NUMBER} ."
             }
         }
 
-       stage("TRIVY"){
-            steps{
-                sh "trivy image  deepak8934/petapp:${BUILD_NUMBER} --scanners vuln > trivyimage.txt" 
+        stage('Trivy Image Scan') {
+            steps {
+                sh "trivy image deepak8934/petapp:${BUILD_NUMBER} --scanners vuln > trivyimage.txt"
             }
         }
 
-        stage('docker image push') {
+        stage('Docker Image Push') {
             steps {
                 withDockerRegistry(credentialsId: 'dockercred', url: '') {
                     sh "docker push deepak8934/petapp:${BUILD_NUMBER}"
                 }
             }
         }
-
-
-        stage('Publish build info') {
-            steps {
-                jf 'rt build-publish'
-            }
-        }
-
-       stage('push artifact') {
-            steps {
-              jf 'rt u /var/lib/jenkins/workspace/pipeline_part2/target/spring-petclinic-3.2.0-SNAPSHOT.jar  petclinic_artifact-libs-snapshot-local/springpetclinic/spring-petclinic-3.2.0-SNAPSHOT.jar'
-
-
-            }
-        }
-
-
-     
-
-
-
-        
     }
 }
+
